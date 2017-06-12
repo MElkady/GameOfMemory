@@ -10,8 +10,11 @@
   "author": "MAK",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "flickrapi": "^0.6.0",
+    "mongoose": "^4.10.5",
+    "underscore": "^1.8.3",
     "uuid": "^3.0.1"
   }
 }

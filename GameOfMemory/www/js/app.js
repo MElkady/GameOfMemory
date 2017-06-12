@@ -40,6 +40,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     templateUrl: 'templates/play.html',
     controller: 'PlayCtrl'
   })
+  .state('scores', {
+    url: '/scores',
+    templateUrl: 'templates/scores.html',
+    controller: 'ScoresCtrl'
+  })
   
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/welcome');

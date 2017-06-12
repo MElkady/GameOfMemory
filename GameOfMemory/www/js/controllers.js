@@ -18,7 +18,7 @@ angular.module('starter.controllers', [])
   const ctrl = this;
 
 
-  $scope.$on("$ionicView.enter", function(event, data){
+  $scope.$on('$ionicView.enter', function(event, data){
     if(event.targetScope !== $scope) {
         return;
     }
@@ -30,7 +30,7 @@ angular.module('starter.controllers', [])
     ctrl.flipedPhoto = null;
     ctrl.disableFlipping = false;
     ctrl.noMatches = 0;
-    ctrl.scope = 0;
+    ctrl.score = 0;
 
     $ionicLoading.show({
       template: 'Loading...'
@@ -43,14 +43,23 @@ angular.module('starter.controllers', [])
         var row = [];
         for(var c = 0; c < data.data.noCols; c++) {
           row.push({
-            "url": data.data.photos[r * data.data.noCols + c],
-            "isFlipped": false,
-            "isMatched": false
+            'url': data.data.photos[r * data.data.noCols + c],
+            'isFlipped': false,
+            'isMatched': false
           })
         }
         ctrl.photosGrid.push(row);
       }
       $ionicLoading.hide();
+    }, function(err) {
+      $ionicLoading.hide();
+      var alertPopup = $ionicPopup.alert({
+        title: 'Error',
+        template: 'Can\'t load game now'
+      });
+      alertPopup.then(function(res) {
+        history.back();
+      });
     });
   });
 
@@ -77,7 +86,7 @@ angular.module('starter.controllers', [])
           if(ctrl.noMatches == (ctrl.noPhotos / 2)) {
             $interval.cancel(ctrl.timer);
             ctrl.score += ctrl.time;  // time bonus
-            ctrl.displayFailedAlert();
+            ctrl.displayWonAlert();
           }
         } else { 
           ctrl.disableFlipping = true;
@@ -108,7 +117,7 @@ angular.module('starter.controllers', [])
   }
 
   this.displayWonAlert = function() {
-    if(localStorage.getItem("username") == null) {
+    if(localStorage.getItem('userid') == null) {
       var myPopup = $ionicPopup.show({
         template: '<input type="text" ng-model="main.username">',
         title: 'You won',
@@ -131,18 +140,15 @@ angular.module('starter.controllers', [])
       });
 
       myPopup.then(function(res) {
-        localStorage.setItem("username", res);
-        this.submitScore(res);
-        history.back();
+        ctrl.submitScore(res);
       });
     } else {
       var alertPopup = $ionicPopup.alert({
         title: 'Game of Memory',
-        template: localStorage.getItem("username") + ', you won!. Your score is: ' + ctrl.score
+        template: 'You won!. Your score is: ' + ctrl.score
       });
       alertPopup.then(function(res) {
-        this.submitScore(localStorage.getItem("username"));
-        history.back();
+        ctrl.submitScore();
       });
     } 
   }
@@ -158,6 +164,59 @@ angular.module('starter.controllers', [])
   }
 
   this.submitScore = function(username) {
-    // Send data to backend
+    const data = { 'gameId': ctrl.gameId, 'score': ctrl.score };
+    if(username) {
+      data.username = username;
+    } else {
+      data.userId = localStorage.getItem('userid');
+    }
+
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
+    $http({
+      method: 'POST',
+      url: 'http://localhost:8080/game',
+      data: JSON.stringify(data)
+    })
+    .then(function (success) {
+      localStorage.setItem('userid', success.data.id);
+      $ionicLoading.hide();
+      history.back();
+    }, function (error) {
+      console.log("error", error);
+      $ionicLoading.hide();
+      history.back();
+    });
   }
+})
+
+
+.controller('ScoresCtrl', function($scope, $http, $ionicLoading, $ionicPopup) {
+  this.highScores = [];
+  this.userId = localStorage.getItem('userid');
+  const ctrl = this;
+
+  $scope.$on('$ionicView.enter', function(event, data){
+    if(event.targetScope !== $scope) {
+        return;
+    }
+    
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
+    $http.get('http://localhost:8080/scores').then(function(data){
+      ctrl.highScores = data.data;
+      $ionicLoading.hide();
+    }, function(err) {
+      $ionicLoading.hide();
+      var alertPopup = $ionicPopup.alert({
+        title: 'Error',
+        template: 'Can\'t load scores now'
+      });
+      alertPopup.then(function(res) {
+        history.back();
+      });
+    });
+  });
 });

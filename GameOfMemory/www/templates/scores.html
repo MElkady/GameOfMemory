@@ -1,0 +1,10 @@
+<ion-view ng-controller="ScoresCtrl as main" title="High Scores">
+    <ion-content class="padding">
+        <ul class="list">
+            <li class="item" ng-repeat="u in main.highScores" ng-class="{'my-score':(u._id == main.userId)}">
+                {{u.username}}
+                <span class="item-note">{{u.totalScore}}</span>
+            </li>
+        </ul>
+    </ion-content>
+</ion-view>
