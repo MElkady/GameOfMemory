@@ -1,0 +1,63 @@
+
+/*welcome screen*/
+.welcome {
+	padding-top: 30%;
+}
+
+.welcome h1 {
+	width: 100%;
+	text-align: center;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+
+/*Game screen*/
+.flip-container {
+	perspective: 1000px;
+}
+
+.flip-container:hover .flipper, .flip-container.hover .flipper {
+    transform: rotateY(180deg);
+}
+
+.flipper {
+	transition: 0.6s;
+	transform-style: preserve-3d;
+	position: relative;
+}
+
+.front, .back {
+	backface-visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100px;
+	white-space: nowrap;
+	text-align: center; margin: 1em 0;
+}
+
+.front {
+	z-index: 2;
+	transform: rotateY(0deg);
+}
+
+.back {
+	transform: rotateY(180deg);
+}
+
+.flipper img {
+    width: 100%;
+	max-height: 100px;
+    vertical-align: middle;
+}
+
+.photos-row {
+	height: 130px;
+}
+
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}

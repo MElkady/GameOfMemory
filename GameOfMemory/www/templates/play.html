@@ -1,0 +1,18 @@
+<ion-view ng-controller="PlayCtrl as main" title="Play">
+    <ion-content class="padding">
+        Time: {{main.time}}, Score: {{main.score}}
+        <div class="row photos-row" ng-repeat="row in main.photosGrid">
+            <div class="flip-container col" ng-repeat="photo in row"
+                ng-class="{'hover':(photo.isFlipped || photo.isMatched)}" ng-click="main.flipPhoto(photo)"> 
+                <div class="flipper">
+                    <div class="front"> 
+                        <span class="helper"></span><img src="img/flipme.png">
+                    </div>
+                    <div class="back"> 
+                        <span class="helper"></span><img ng-src="{{photo.url}}">
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
