@@ -131,8 +131,8 @@ angular.module('starter.controllers', [])
       });
 
       myPopup.then(function(res) {
-        console.log('username!', res);
-        // TODO save to backend
+        localStorage.setItem("username", res);
+        this.submitScore(res);
         history.back();
       });
     } else {
@@ -141,11 +141,10 @@ angular.module('starter.controllers', [])
         template: localStorage.getItem("username") + ', you won!. Your score is: ' + ctrl.score
       });
       alertPopup.then(function(res) {
-        // TODO save to backend
+        this.submitScore(localStorage.getItem("username"));
         history.back();
       });
-    }
-    
+    } 
   }
 
   this.displayFailedAlert = function() {
@@ -156,5 +155,9 @@ angular.module('starter.controllers', [])
     alertPopup.then(function(res) {
       history.back();
     });
+  }
+
+  this.submitScore = function(username) {
+    // Send data to backend
   }
 });
