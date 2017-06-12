@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('PlayCtrl', function($http, $timeout, $scope, $interval, $ionicPopup, $ionicLoading) {
+.controller('PlayCtrl', function($http, $timeout, $scope, $interval, $ionicPopup, $ionicLoading, BACKEND_URL) {
   // Game data
   this.photosGrid = [];
   this.noPhotos = 0;
@@ -35,7 +35,7 @@ angular.module('starter.controllers', [])
     $ionicLoading.show({
       template: 'Loading...'
     });
-    $http.get('http://localhost:8080/game').then(function(data){
+    $http.get(BACKEND_URL + '/game').then(function(data){
       ctrl.time = data.data.time;
       ctrl.gameId = data.data.id;
       ctrl.noPhotos = data.data.photos.length;
@@ -176,7 +176,7 @@ angular.module('starter.controllers', [])
     });
     $http({
       method: 'POST',
-      url: 'http://localhost:8080/game',
+      url: BACKEND_URL + '/game',
       data: JSON.stringify(data)
     })
     .then(function (success) {
@@ -189,34 +189,4 @@ angular.module('starter.controllers', [])
       history.back();
     });
   }
-})
-
-
-.controller('ScoresCtrl', function($scope, $http, $ionicLoading, $ionicPopup) {
-  this.highScores = [];
-  this.userId = localStorage.getItem('userid');
-  const ctrl = this;
-
-  $scope.$on('$ionicView.enter', function(event, data){
-    if(event.targetScope !== $scope) {
-        return;
-    }
-    
-    $ionicLoading.show({
-      template: 'Loading...'
-    });
-    $http.get('http://localhost:8080/scores').then(function(data){
-      ctrl.highScores = data.data;
-      $ionicLoading.hide();
-    }, function(err) {
-      $ionicLoading.hide();
-      var alertPopup = $ionicPopup.alert({
-        title: 'Error',
-        template: 'Can\'t load scores now'
-      });
-      alertPopup.then(function(res) {
-        history.back();
-      });
-    });
-  });
 });
