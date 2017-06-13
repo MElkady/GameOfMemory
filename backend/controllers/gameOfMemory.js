@@ -9,10 +9,22 @@ const flickrOptions = {
 const game = require('../models/game.js')
 const user = require('../models/user.js')
 
-module.exports.createGame = function(level, callback){
-    const noRows = 3
-	const noCols = 4
-	const time = 120
+module.exports.createGame = function(difficulty, callback){
+	// default values...
+    var noRows = 3
+	var noCols = 4
+	var time = 120
+
+	if(difficulty == 2) {
+		noRows = 3
+		noCols = 4
+		time = 60
+	} else if(difficulty == 3) { 
+		noRows = 4
+		noCols = 5
+		time = 60
+	}
+
 	const noImages = noRows * noCols / 2
 
     Flickr.tokenOnly(flickrOptions, function(error, flickr) {

@@ -32,10 +32,12 @@ angular.module('starter.controllers', [])
     ctrl.noMatches = 0;
     ctrl.score = 0;
 
+    const difficulty = localStorage.getItem("difficulty") || "1";
+
     $ionicLoading.show({
       template: 'Loading...'
     });
-    $http.get(BACKEND_URL + '/game').then(function(data){
+    $http.get(BACKEND_URL + '/game?difficulty=' + difficulty).then(function(data){
       ctrl.time = data.data.time;
       ctrl.gameId = data.data.id;
       ctrl.noPhotos = data.data.photos.length;

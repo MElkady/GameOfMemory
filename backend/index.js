@@ -12,9 +12,9 @@ const port = process.env.PORT || 8080
 app.use(bodyParser.json())
 
 app.get('/game', function (req, res) {
-	const level = req.query.q || 1
+	const difficulty = req.query.difficulty || 1
 
-	gameOfMemory.createGame(level, function(err, game){
+	gameOfMemory.createGame(difficulty, function(err, game){
 		if(err) {
 			return res.status(500).set({
 					'Access-Control-Allow-Origin': '*'

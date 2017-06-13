@@ -17,6 +17,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 })
 
 .constant('BACKEND_URL', 'https://game-of-memory.herokuapp.com')
+//.constant('BACKEND_URL', 'http://localhost:8080')
 
 .config(function($stateProvider, $urlRouterProvider, $compileProvider) {
   $compileProvider.debugInfoEnabled(false);
@@ -36,6 +37,11 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     templateUrl: 'templates/scores.html',
     controller: 'ScoresCtrl'
   })
+  .state('settings', {
+    url: '/settings',
+    templateUrl: 'templates/settings.html',
+    controller: 'SettingsCtrl'
+  });
   
   $urlRouterProvider.otherwise('/welcome');
 });
