@@ -63,11 +63,22 @@ angular.module('starter.controllers', [])
     });
   });
 
+  $scope.$on('$ionicView.beforeLeave', function(){
+      if(ctrl.timer) {
+          $interval.cancel(ctrl.timer);
+          ctrl.timer = null;
+      }
+      ctrl.photosGrid = [];
+      ctrl.noPhotos = 0;
+      ctrl.time = 0;
+      ctrl.score = 0;
+  });
+
   
 
   this.flipPhoto = function(photo) {
     this.startTimer();  // if timer wasn't started, then start it...
-    if(ctrl.disableFlipping) {  // Case of 2 card flipped, so skip
+    if(ctrl.disableFlipping || photo.isMatched) {  // Case of 2 card flipped, so skip
       return;
     }
     
@@ -80,6 +91,8 @@ angular.module('starter.controllers', [])
         ctrl.flipedPhoto = photo;
       } else { 
         if(ctrl.flipedPhoto.url == photo.url) { // if both card are same picture
+          photo.isMatched = true;
+          ctrl.flipedPhoto.isMatched = true;
           ctrl.flipedPhoto = null;
           ctrl.score += 20;
           ctrl.noMatches++;
