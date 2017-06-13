@@ -18,7 +18,9 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
 .constant('BACKEND_URL', 'https://game-of-memory.herokuapp.com')
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $compileProvider) {
+  $compileProvider.debugInfoEnabled(false);
+
   $stateProvider  
   .state('welcome', {
     url: '/welcome',
